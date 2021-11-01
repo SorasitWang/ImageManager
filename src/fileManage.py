@@ -5,7 +5,7 @@ import os
 def addNewFile(catTags,nameFile,fromWaiting=False):
     print(catTags)
 
-    with open("database.json",'r+') as file:
+    with open("src/database.json",'r+') as file:
 
         fileData = json.load(file)
 
@@ -15,7 +15,6 @@ def addNewFile(catTags,nameFile,fromWaiting=False):
             tag = tag.strip()
             if tag is None:
                 continue
-            print(category,tag)
             if category not in fileData :
                 fileData[category] = {}
             
@@ -60,23 +59,20 @@ def classifyImg(img):
     return 
 
 def searchFile(category,tag=""):
-    with open("database.json",'r') as file:
+    with open("src/database.json",'r') as file:
         
         fileData = json.load(file)
        
         inCat = fileData.get(category)
         if inCat is None:
-            print(1)
             return None
         if len(tag) == 0:
-            print(2)
             return inCat
-        print(3)
         return {tag:inCat.get(tag)}
 
 def searchInfo(nameImg):
 
-    with open("database.json",'r') as file:
+    with open("src/database.json",'r') as file:
         
         fileData = json.load(file)
         result = []
@@ -91,10 +87,3 @@ def searchInfo(nameImg):
         
 
     return result
-
-
-
-#moveFile("aaa",'mouse')
-#print(searchInfo("for/mouse.png"))
-x = [4,5]
-x.pop()

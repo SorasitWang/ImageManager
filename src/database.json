@@ -1,0 +1,29 @@
+{
+    "animal": {
+        "cat": [
+            "res/cat.jpg",
+            "res/cat1.jpg",
+            "res/totoro.jpg",
+            "res/dogPunch.jpg",
+            "res/dog.jpg"
+        ],
+        "dog": [
+            "res/dog.jpg",
+            "res/dog1.jpg",
+            "res/totoro.jpg"
+        ]
+    },
+    "color": {
+        "red": [
+            "res/tomato.png"
+        ],
+        "orange": []
+    },
+    "WAITING": ["res/mouse.png"],
+    "size": {
+        "tiny": [
+            "res/cat.jpg"
+        ]
+    }
+   
+}

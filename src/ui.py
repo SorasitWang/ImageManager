@@ -32,23 +32,25 @@ class imgBox:
             self.frame.pack(side = "left")
         else :
             self.frame.pack_forget()
-        '''
-        self.label = Text(self.frame,height=25,width =100)
-        self.label.insert(INSERT,nameImg)
-        self.label.pack(side="bottom")
-        '''
+
 
 class imgRow:
-    def __init__(self,ui,root,tag,imgs):
+    def __init__(self,ui,root,cat,tag,imgs):
         self.imgLists = []
         self.idx = 0
-        self.frame = Frame(root,height=150,width = 550,bg="blue",borderwidth=5)
+        self.frame = Frame(root,height=200,width = 550,bg="blue",borderwidth=5)
+        self.frame1 = Frame(self.frame,height=100,width = 550,bg="pink",borderwidth=5)
+        
         h=Scale(self.frame, orient='horizontal')
         h.pack(side=BOTTOM, fill='x')
+        self.label = Text(self.frame,height=25,width =100)
+        self.label.insert(INSERT,cat+":"+tag)
+        self.frame1.pack(side="bottom")
         self.frame.pack(padx = 5, pady = 5)
         self.frame.pack_propagate(False)
         for img in imgs:
-            self.imgLists.append(imgBox(ui,self.frame,img))
+           self.imgLists.append(imgBox(ui,self.frame1,img))
+        self.label.pack(side="top")
 
         def nextImg(i):
             i = int(i)
@@ -70,7 +72,7 @@ class imgBlog:
         self.frame.pack(padx = 5, pady = 8)
         self.imgRows = []
         for tag in tags :
-            self.imgRows.append(imgRow(ui,self.frame,tag,imgs.get(tag)))
+            self.imgRows.append(imgRow(ui,self.frame,cat,tag,imgs.get(tag)))
     def unpack(self):
         self.frame.destroy()
        
@@ -95,7 +97,7 @@ class ui :
         self.waitingView = Frame(self.fileView,height=self.size[0],width = 0.33*self.size[1],bg="green",borderwidth=5)
         self.waitingView.pack(side="bottom")
         result = searchFile("WAITING")
-        self.row = imgRow(ui,self.waitingView,"Waiting",result)
+        self.row = imgRow(ui,self.waitingView,"Waiting","",result)
         self.setupSearchView()
         self.setupWaitingView()
         self.root.mainloop()
@@ -137,6 +139,7 @@ class ui :
                             command=lambda: updateTag())
         self.infoBox = Text(self.searchView, height=5, width=10)
         self.panel = Label(self.searchView)
+        self.namePreview = Label(self.searchView)
         self.buffer = None
         self.refreshSystem()
 
@@ -144,8 +147,8 @@ class ui :
     def setupWaitingView(self):
         result = searchFile("WAITING")
         self.row.unpack()
-        self.row = imgRow(ui,self.waitingView,"Waiting",result)
-        print(result)
+        self.row = imgRow(ui,self.waitingView,"Waiting","",result)
+
         
         
         
@@ -155,10 +158,13 @@ class ui :
         global selectImg
         if selectImg["img"] != None and selectImg["img"] != self.buffer:
 
-            self.panel.pack_forget()
+            
             self.infoBox.pack_forget()
             self.updateBtn.pack_forget()
-            self.panel = Label(self.searchView,image = selectImg["img"])
+            
+            self.namePreview.config(text=selectImg["name"])
+            self.namePreview.pack()
+            self.panel.config(image=selectImg["img"])
             self.panel.pack(side="top")
             self.buffer = selectImg["img"]
 
@@ -167,7 +173,7 @@ class ui :
                 if len(catTag[i][1]) == 0:
                     catTag = []
                     break
-                catTag[i] =catTag[i][0] + "," +catTag[i][1]
+                catTag[i] =catTag[i][0] + ":" +catTag[i][1]
             txt = "\n".join(catTag)
 
             self.infoBox.delete(1.0,"end")    
@@ -182,8 +188,3 @@ class ui :
 
 
 u = ui()
-#print(u)
-
-
-y= {'ANI': {'cat': ['cat.png', 'cat1.jpg'], 'dog': ['dog.png', 'dogg.jpg']}, 'color': {'red': ['tomato.png'], 'orange': []}}
-print("ANI" in y)
