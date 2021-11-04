@@ -11,6 +11,9 @@
             "res/dog.jpg",
             "res/dog1.jpg",
             "res/totoro.jpg"
+        ],
+        "rabbit":[
+            "res/dog1.jpg"
         ]
     },
     "color": {

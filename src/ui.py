@@ -38,8 +38,8 @@ class imgRow:
     def __init__(self,ui,root,cat,tag,imgs):
         self.imgLists = []
         self.idx = 0
-        self.frame = Frame(root,height=200,width = 550,bg="blue",borderwidth=5)
-        self.frame1 = Frame(self.frame,height=100,width = 550,bg="pink",borderwidth=5)
+        self.frame = Frame(root,height=200,width = 480,bg="blue",borderwidth=5)
+        self.frame1 = Frame(self.frame,height=150,width = 480,bg="pink",borderwidth=5)
         
         h=Scale(self.frame, orient='horizontal')
         h.pack(side=BOTTOM, fill='x')
@@ -61,6 +61,11 @@ class imgRow:
            
 
         h.config(command=nextImg, from_=min(4,len(self.imgLists)), to=len(self.imgLists))
+    def show(self,t):
+        if t :
+            self.frame.pack(padx = 5, pady = 5)
+        else :
+            self.frame.pack_forget()
 
     def unpack(self):
         self.frame.destroy()
@@ -70,9 +75,27 @@ class imgBlog:
     def __init__(self,ui,root,cat,tags,imgs):
         self.frame = Frame(root,bg="yellow")
         self.frame.pack(padx = 5, pady = 8)
+        self.frameL = Frame(self.frame,bg="orange")
+        self.frameL.pack(side=LEFT)
+        self.frameR = Frame(self.frame,bg="black")
+        #self.frameR.pack(side=LEFT,fill="y")
         self.imgRows = []
+        h=Scale(self.frame, orient='vertical')
+        h.pack(side=RIGHT,fill="y")
         for tag in tags :
-            self.imgRows.append(imgRow(ui,self.frame,cat,tag,imgs.get(tag)))
+            self.imgRows.append(imgRow(ui,self.frameL,cat,tag,imgs.get(tag)))
+        
+        
+        def nextRow(i):
+            i = int(i)
+            print(i)
+            for e in self.imgRows:
+                e.show(False)
+            for j in range(max(0,i-2),min(i,len(self.imgRows)),1):
+                self.imgRows[j].show(True)
+        h.config(command=nextRow, from_=min(2,len(self.imgRows)), to=len(self.imgRows))
+        
+        
     def unpack(self):
         self.frame.destroy()
        
@@ -80,21 +103,21 @@ class imgBlog:
 
 class ui :
     def __init__(self):
-        self.size = (720,720)
+        self.size = (720,660)
         self.imgBlogs = []
         self.root = Tk()
         self.root.geometry(str(self.size[0])+"x"+str(self.size[1]))
 
-        self.fileView = Frame(self.root,height=self.size[1],width = 0.67*self.size[0],bg="red",borderwidth=5)
+        self.fileView = Frame(self.root,height=self.size[1],width = 0.75*self.size[0],bg="red",borderwidth=5)
         self.fileView.pack(side=LEFT)
         self.fileView.pack_propagate(False)
 
-        self.searchView = Frame(self.root,height=self.size[1],width = 0.33*self.size[0],bg="green",borderwidth=5)
+        self.searchView = Frame(self.root,height=self.size[1],width = 0.25*self.size[0],bg="green",borderwidth=5)
         self.searchView.pack(side=RIGHT)
         self.searchView.pack_propagate(False)
 
         
-        self.waitingView = Frame(self.fileView,height=self.size[0],width = 0.33*self.size[1],bg="green",borderwidth=5)
+        self.waitingView = Frame(self.fileView,height=self.size[0],width = 0.25*self.size[1],bg="green",borderwidth=5)
         self.waitingView.pack(side="bottom")
         result = searchFile("WAITING")
         self.row = imgRow(ui,self.waitingView,"Waiting","",result)
@@ -104,7 +127,7 @@ class ui :
 
     def setupSearchView(self):
         def sendInput():
-            catValue=catBox.get("1.0","end-1c").strip()
+            catValue="animal"#catBox.get("1.0","end-1c").strip()
             tagValue=tagBox.get("1.0","end-1c").strip()
             result = searchFile(catValue,tagValue)
             for blog in self.imgBlogs :
@@ -120,15 +143,19 @@ class ui :
         self.searchBox = Frame(self.searchView,height=100,width = 0.33*self.size[1],bg="blue",borderwidth=5)
         self.searchBox.pack()
         self.searchBox.pack_propagate(False)
+        catLabel = Label(self.searchBox,text="Category : ")
+        catLabel.grid(row=1,column=1)
         catBox=Text(self.searchBox, height=2, width=10)
-        catBox.pack()
+        catBox.grid(row=1,column=2)
 
+        tagLabel = Label(self.searchBox,text="Tag : ")
+        tagLabel.grid(row=2,column=1)
         tagBox = Text(self.searchBox, height=2, width=10)
-        tagBox.pack()
+        tagBox.grid(row=2,column=2)
         buttonCommit=Button(self.searchBox, height=1, width=10, text="Commit", 
                             command=lambda: sendInput())
         #command=lambda: retrieve_input() >>> just means do this when i press the button
-        buttonCommit.pack()
+        buttonCommit.grid(row=3,column=2)
 
 
         def updateTag():
