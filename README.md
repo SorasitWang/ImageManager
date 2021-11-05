@@ -13,9 +13,25 @@ Provide Waiting tag for image that not categorize yet.
 
 
 
-### What's next
+## What's next
 
 1. Use online storage (ex google drive) instead of local storage for teamwork
 2. More friendly UI
 3. Apply object classification 
 4. Manage the file location
+
+
+
+## Image credit 
+
+From https://www.pexels.com/
+
+  - Rabbit : Anna Shvets
+    
+  -  Dog : Helena Lopes, Christian Domingues, Willian Luiz
+    
+  -  Hedgehog : Pixabay
+    
+  -  Cat : Flickr, Ihsan Adityawarman, Kirsten Bühne
+    
+---Thanks for cute pictures!---
