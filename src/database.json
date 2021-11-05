@@ -3,26 +3,26 @@
         "cat": [
             "res/cat.jpg",
             "res/cat1.jpg",
-            "res/totoro.jpg",
-            "res/dogPunch.jpg",
+            "res/cat2.jpg",
+            "res/dog2.jpg",
             "res/dog.jpg"
         ],
         "dog": [
             "res/dog.jpg",
             "res/dog1.jpg",
-            "res/totoro.jpg"
+            "res/dog2.jpg"
         ],
         "rabbit":[
-            "res/dog1.jpg"
+            "res/rabbit.jpg"
         ]
     },
     "color": {
-        "red": [
-            "res/tomato.png"
+        "black": [
+            "res/cat2.jpg"
         ],
         "orange": []
     },
-    "WAITING": ["res/mouse.png"],
+    "waiting": ["res/hedgehog.jpg"],
     "size": {
         "tiny": [
             "res/cat.jpg"

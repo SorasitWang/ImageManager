@@ -1,9 +1,8 @@
 import json
 import shutil
 import os
-# python object to be appended
+
 def addNewFile(catTags,nameFile,fromWaiting=False):
-    print(catTags)
 
     with open("src/database.json",'r+') as file:
 
@@ -11,8 +10,8 @@ def addNewFile(catTags,nameFile,fromWaiting=False):
 
         for e in catTags:
             category , tag = e.split(",")
-            category = category.strip()
-            tag = tag.strip()
+            category = category.strip().lower()
+            tag = tag.strip().lower()
             if tag is None:
                 continue
             if category not in fileData :
@@ -32,17 +31,13 @@ def addNewFile(catTags,nameFile,fromWaiting=False):
         json.dump(fileData, file, indent = 4)
 
 def moveFile(type,name):  
-    directory = "test"
+    directory = ""
   
-    # Parent Directory path
-    parent_dir = "D:/program/CV/New folder"
+    parent_dir = ""
     
     # Path
     path = os.path.join(parent_dir, directory)
-    
-    # Create the directory
-    # 'GeeksForGeeks' in
-    # '/home / User / Documents'
+
     try :
         os.mkdir(path)
     except OSError as e:
@@ -59,19 +54,23 @@ def classifyImg(img):
     return 
 
 def searchFile(category,tag=""):
+    category = category.lower()
+    tag = tag.lower()
     with open("src/database.json",'r') as file:
         
         fileData = json.load(file)
        
         inCat = fileData.get(category)
-        if inCat is None:
+        if inCat is None :
             return None
-        if len(tag) == 0:
+        if len(tag) == 0 :
             return inCat
+        if inCat.get(tag) is None:
+            return None
         return {tag:inCat.get(tag)}
 
 def searchInfo(nameImg):
-
+    nameImg = nameImg.lower()
     with open("src/database.json",'r') as file:
         
         fileData = json.load(file)
@@ -87,3 +86,6 @@ def searchInfo(nameImg):
         
 
     return result
+
+
+

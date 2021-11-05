@@ -13,12 +13,12 @@ selectImg = {"img":None,"name":None}
 class imgBox:
       
     def __init__(self,ui,root,nameImg):
-        self.frame = Frame(root,height=130,width =100,bg="red",borderwidth=5)
+        self.frame = Frame(root,height=130,width =100,highlightbackground="black",highlightthickness=1)
         self.nameImg = nameImg
         self.frame.pack(side = "left")
         self.img = ImageTk.PhotoImage(Image.open(nameImg).resize((100,100), Image.ANTIALIAS))
         self.ui = ui
-        self.panel = Label(self.frame,text="555555", image = self.img)
+        self.panel = Label(self.frame,image = self.img)
         self.panel.pack(side="top")
             
         self.panel.bind("<Button>",lambda event : self.onClick(event))
@@ -38,8 +38,8 @@ class imgRow:
     def __init__(self,ui,root,cat,tag,imgs):
         self.imgLists = []
         self.idx = 0
-        self.frame = Frame(root,height=200,width = 480,bg="blue",borderwidth=5)
-        self.frame1 = Frame(self.frame,height=150,width = 480,bg="pink",borderwidth=5)
+        self.frame = Frame(root,height=200,width = 480,highlightbackground="gray",highlightthickness=2)
+        self.frame1 = Frame(self.frame,height=150,width = 480,highlightbackground="gray",highlightthickness=2)
         
         h=Scale(self.frame, orient='horizontal')
         h.pack(side=BOTTOM, fill='x')
@@ -61,6 +61,7 @@ class imgRow:
            
 
         h.config(command=nextImg, from_=min(4,len(self.imgLists)), to=len(self.imgLists))
+
     def show(self,t):
         if t :
             self.frame.pack(padx = 5, pady = 5)
@@ -75,15 +76,14 @@ class imgBlog:
     def __init__(self,ui,root,cat,tags,imgs):
         self.frame = Frame(root,bg="yellow")
         self.frame.pack(padx = 5, pady = 8)
-        self.frameL = Frame(self.frame,bg="orange")
+        self.frameL = Frame(self.frame,highlightbackground="black",highlightthickness=2)
         self.frameL.pack(side=LEFT)
-        self.frameR = Frame(self.frame,bg="black")
-        #self.frameR.pack(side=LEFT,fill="y")
         self.imgRows = []
         h=Scale(self.frame, orient='vertical')
         h.pack(side=RIGHT,fill="y")
         for tag in tags :
             self.imgRows.append(imgRow(ui,self.frameL,cat,tag,imgs.get(tag)))
+        
         
         
         def nextRow(i):
@@ -94,6 +94,9 @@ class imgBlog:
             for j in range(max(0,i-2),min(i,len(self.imgRows)),1):
                 self.imgRows[j].show(True)
         h.config(command=nextRow, from_=min(2,len(self.imgRows)), to=len(self.imgRows))
+
+        if len(self.imgRows) <= 2:
+            h.pack_forget()
         
         
     def unpack(self):
@@ -108,16 +111,16 @@ class ui :
         self.root = Tk()
         self.root.geometry(str(self.size[0])+"x"+str(self.size[1]))
 
-        self.fileView = Frame(self.root,height=self.size[1],width = 0.75*self.size[0],bg="red",borderwidth=5)
+        self.fileView = Frame(self.root,height=self.size[1],width = 0.75*self.size[0],highlightbackground="black",highlightthickness=1)
         self.fileView.pack(side=LEFT)
         self.fileView.pack_propagate(False)
 
-        self.searchView = Frame(self.root,height=self.size[1],width = 0.25*self.size[0],bg="green",borderwidth=5)
+        self.searchView = Frame(self.root,height=self.size[1],width = 0.25*self.size[0],highlightbackground="black",highlightthickness=1)
         self.searchView.pack(side=RIGHT)
         self.searchView.pack_propagate(False)
 
         
-        self.waitingView = Frame(self.fileView,height=self.size[0],width = 0.25*self.size[1],bg="green",borderwidth=5)
+        self.waitingView = Frame(self.fileView,height=self.size[0],width = 0.25*self.size[1],highlightbackground="black",highlightthickness=1)
         self.waitingView.pack(side="bottom")
         result = searchFile("WAITING")
         self.row = imgRow(ui,self.waitingView,"Waiting","",result)
@@ -127,11 +130,14 @@ class ui :
 
     def setupSearchView(self):
         def sendInput():
-            catValue="animal"#catBox.get("1.0","end-1c").strip()
+            catValue=catBox.get("1.0","end-1c").strip()
             tagValue=tagBox.get("1.0","end-1c").strip()
             result = searchFile(catValue,tagValue)
+            print(result)
             for blog in self.imgBlogs :
                 blog.unpack()
+            if result is None :
+                return
             self.imgBlogs = []
             if len(catValue) == 0:
                 return
@@ -140,7 +146,7 @@ class ui :
             else :
                 self.imgBlogs.append(imgBlog(self,self.fileView,catValue,[tagValue],result))
 
-        self.searchBox = Frame(self.searchView,height=100,width = 0.33*self.size[1],bg="blue",borderwidth=5)
+        self.searchBox = Frame(self.searchView,height=100,width = 0.33*self.size[1],highlightbackground="black",highlightthickness=1)
         self.searchBox.pack()
         self.searchBox.pack_propagate(False)
         catLabel = Label(self.searchBox,text="Category : ")
